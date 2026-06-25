@@ -4,7 +4,7 @@ info:
   description: Busca providencias tituladas del Consejo de Estado de Colombia (sistema SAMAI).
   version: 1.0.0
 servers:
-  - url: https://TU-URL-DE-DESPLIEGUE   # <-- reemplazar tras desplegar (Render, HF Spaces, etc.)
+  - url: https://samai-consulta.onrender.com
 paths:
   /buscar:
     get:
