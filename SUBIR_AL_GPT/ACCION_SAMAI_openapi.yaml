@@ -45,6 +45,17 @@ paths:
           schema:
             type: string
             default: FechaProvidencia desc
+        - name: modo
+          in: query
+          required: false
+          description: >
+            Lógica entre términos. 'all' (por defecto) = AND, exige TODOS los
+            términos; es lo más preciso. 'any' = OR, basta cualquiera; úsalo para
+            AMPLIAR cuando una búsqueda 'all' devuelve muy pocos o ningún resultado.
+          schema:
+            type: string
+            enum: [all, any]
+            default: all
       responses:
         "200":
           description: Resultados de la búsqueda

@@ -31,6 +31,14 @@ paths:
           schema:
             type: string
             default: FechaProvidencia desc
+        - name: modo
+          in: query
+          required: false
+          description: "'all' = AND (todos los terminos, por defecto, mas preciso); 'any' = OR (cualquiera, para ampliar)."
+          schema:
+            type: string
+            enum: [all, any]
+            default: all
       responses:
         "200":
           description: Resultados de la busqueda

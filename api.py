@@ -28,10 +28,14 @@ def buscar(
     orden: str = Query("FechaProvidencia desc",
                        description="Orden: 'FechaProvidencia desc' (reciente), "
                        "'FechaProvidencia' (antiguo), '' (ranking)."),
+    modo: str = Query("all", description="'all' = exige TODOS los terminos (AND, "
+                      "por defecto, mas preciso); 'any' = basta CUALQUIER termino "
+                      "(OR, para ampliar cuando hay pocos resultados)."),
 ):
     """Devuelve providencias del Consejo de Estado que coinciden con la consulta."""
+    modo = "any" if str(modo).lower() == "any" else "all"
     try:
-        return samai.buscar(consulta, pagina=pagina, orderby=orden)
+        return samai.buscar(consulta, pagina=pagina, orderby=orden, search_mode=modo)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Error consultando SAMAI: {e}")
 

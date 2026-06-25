@@ -94,19 +94,37 @@ Reglas de oro ante error:
   fuente alterna → declaración de vacío, en ese orden.
 - Informa al usuario, con transparencia, qué intentaste y qué resultó.
 
-## 6. Buenas prácticas de sintaxis de `consulta`
+## 6. Sintaxis de `consulta` y modo de búsqueda (verificado empíricamente)
 
-- **Frases exactas entre comillas** son el recurso más fiable: `"daño antijurídico"`,
-  `"reparación directa"`. Son lo que mejor acota.
-- Conectores `AND` / `OR` / `AND NOT` (mayúsculas) **se aceptan, pero filtran de
-  forma DÉBIL** en SAMAI: un `AND` apenas reduce los resultados (no es una
-  intersección estricta). Por eso NO confíes en el `AND` para precisar: úsalo
-  como ayuda, no como garantía de pertinencia.
-- Como el motor no filtra fino, **la pertinencia se gana leyendo**: usa `orden`
-  vacío (ranking de coincidencia) para que lo más relevante suba, y CONFIRMA cada
-  providencia abriendo su texto con obtenerTextoProvidencia (§4). No cites por el
-  solo hecho de que aparezca en la lista.
-- Estrategia recomendada: 1-2 frases núcleo entre comillas + `orden` vacío →
-  revisa los primeros resultados → abre los 3-4 más prometedores → quédate con
-  los 2-3 que el texto confirme pertinentes.
+Las comillas y los conectores SÍ acotan; el truco es usar términos específicos.
+Cifras reales medidas contra SAMAI (nº de páginas de resultados):
+
+- **Comillas = frase exacta, fuerte filtro:** `"falla del servicio"` → 722 págs;
+  sin comillas `falla del servicio` → 1942 págs. **Usa SIEMPRE comillas** para
+  frases jurídicas.
+- **`AND` = intersección real:** `"privación injusta de la libertad"` → 444 págs;
+  `… AND "error judicial"` → **75 págs**. El AND filtra de verdad cuando los
+  términos son distintivos (no ubicuos). Con frases muy comunes que casi siempre
+  coexisten (p. ej. "falla del servicio" + "reparación directa") apenas acota:
+  no es que falle, es que ambos términos están en casi todo. En ese caso, agrega
+  un tercer término más específico del caso.
+- **`AND NOT` = exclusión real:** `… AND NOT "absolución"` reduce de 444 a 299.
+- Conectores en MAYÚSCULAS: `AND`, `OR`, `AND NOT`.
+
+Parámetro `modo` de la acción (controla la lógica entre términos):
+- **`modo=all` (por defecto) = AND**: exige todos los términos. Es lo más preciso;
+  úsalo casi siempre.
+- **`modo=any` = OR**: basta cualquiera de los términos (amplía mucho:
+  "falla del servicio" pasa de 722 a 2643 págs). Úsalo SOLO para AMPLIAR cuando
+  una búsqueda `all` quedó vacía o con muy pocos resultados.
+- Otros valores (exact, phrase, boolean…) NO son válidos: devuelven 0 resultados.
+
+Estrategia recomendada de precisión:
+1. Empieza con 2 frases núcleo entre comillas en `modo=all` (AND).
+2. Si hay demasiados resultados poco pertinentes, **añade un término más
+   específico del caso** (no bajes a términos genéricos).
+3. Si hay muy pocos o ninguno, **quita un término** o cambia a `modo=any` (OR), o
+   usa `orden` vacío (ranking) para que lo más relevante suba primero.
+4. Pase lo que pase, CONFIRMA pertinencia abriendo el texto (§4): la lista nunca
+   basta para citar.
 - Llama obtenerTextoProvidencia poco después de buscar (los enlaces caducan).
