@@ -1,0 +1,104 @@
+openapi: 3.1.0
+info:
+  title: Consulta de Jurisprudencia SAMAI - Consejo de Estado
+  description: >
+    Busca providencias tituladas del Consejo de Estado de Colombia (sistema SAMAI)
+    y devuelve el texto completo de cada fallo. Fuente oficial.
+  version: 1.0.0
+servers:
+  - url: https://samai-consulta.onrender.com
+paths:
+  /buscar:
+    get:
+      operationId: buscarJurisprudencia
+      summary: Busca providencias del Consejo de Estado por texto
+      description: >
+        Devuelve hasta 10 providencias por página con sus metadatos y un campo
+        url_documento por cada una. Para construir una línea jurisprudencial,
+        llama varias veces con distintas formulaciones y avanza de página
+        (parámetro 'pagina') hasta reunir 2-3 providencias pertinentes. Revisa
+        'total_paginas' para saber cuántas hay. Si la primera llamada falla o
+        tarda (el servicio puede estar despertando), reintenta una vez.
+      parameters:
+        - name: consulta
+          in: query
+          required: true
+          description: >
+            Texto a buscar. Admite frases entre comillas y conectores en
+            mayúsculas AND / OR / AND NOT. Ej: "falla del servicio" AND "reparación directa".
+          schema:
+            type: string
+        - name: pagina
+          in: query
+          required: false
+          description: Página de resultados (0 = primera). 10 resultados por página.
+          schema:
+            type: integer
+            default: 0
+        - name: orden
+          in: query
+          required: false
+          description: >
+            Orden de los resultados: 'FechaProvidencia desc' (más reciente primero,
+            por defecto), 'FechaProvidencia' (más antigua primero), o '' (vacío =
+            ranking de coincidencia, útil cuando importa la relevancia textual).
+          schema:
+            type: string
+            default: FechaProvidencia desc
+      responses:
+        "200":
+          description: Resultados de la búsqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_paginas:
+                    type: integer
+                  resultados_en_pagina:
+                    type: integer
+                  resultados:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        radicado: { type: string }
+                        interno: { type: string }
+                        clase_proceso: { type: string }
+                        fecha_providencia: { type: string }
+                        ponente: { type: string }
+                        sala: { type: string }
+                        actor: { type: string }
+                        demandado: { type: string }
+                        tipo_providencia: { type: string }
+                        problema_juridico: { type: string }
+                        url_proceso: { type: string }
+                        url_documento: { type: string }
+  /documento:
+    get:
+      operationId: obtenerTextoProvidencia
+      summary: Devuelve el texto completo de una providencia
+      description: >
+        Recibe el campo 'url_documento' de un resultado de buscarJurisprudencia y
+        devuelve el texto íntegro del fallo (extraído del PDF oficial). Llámala
+        poco después de buscar: el enlace es de vida corta. Si falla con error,
+        vuelve a llamar buscarJurisprudencia para obtener un url_documento fresco
+        y reintenta una vez.
+      parameters:
+        - name: url_documento
+          in: query
+          required: true
+          description: Valor 'url_documento' tal cual viene en un resultado de buscarJurisprudencia.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Texto de la providencia
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url_pdf: { type: string }
+                  paginas: { type: integer }
+                  texto: { type: string }

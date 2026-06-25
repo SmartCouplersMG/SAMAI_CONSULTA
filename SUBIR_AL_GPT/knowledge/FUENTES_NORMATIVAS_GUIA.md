@@ -28,6 +28,33 @@
 | Constitución Política — Gestor Normativo | https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=4125 |
 | Buscador de Providencias Tituladas (Consejo de Estado / SAMAI) | https://samai.consejodeestado.gov.co/TitulacionRelatoria/BuscadorProvidenciasTituladas.aspx |
 
+### 2.1 Portales oficiales para BUSCAR y VERIFICAR LEYES Y DECRETOS en la web
+
+> La búsqueda web de normas **complementa** los PDF cargados y permite comprobar **vigencia**
+> (que la norma no esté derogada/modificada/declarada inexequible). Verificar toda norma en
+> ≥1 fuente oficial antes de citarla como `VERIFICADA`.
+
+| Portal | URL | Para qué |
+|---|---|---|
+| **SUIN-Juriscol (MinJusticia)** | https://www.suin-juriscol.gov.co/ | **Preferente para vigencia** y afectaciones normativas; leyes, decretos, actos legislativos (fuente: Diario Oficial) |
+| Gestor Normativo — Función Pública | https://www.funcionpublica.gov.co/eva/gestornormativo/ | Texto de normas (lo usa la Action `consultarNorma`) |
+| Secretaría del Senado (basedoc) | http://www.secretariasenado.gov.co/ | Texto de leyes con notas de vigencia |
+| Sección de Leyes del Senado | https://leyes.senado.gov.co/ | Leyes por legislatura |
+| DAPRE — Presidencia | https://dapre.presidencia.gov.co/normativa/ | Leyes y decretos del Ejecutivo |
+| Diario Oficial — Imprenta Nacional | (consulta del Diario Oficial) | Publicación oficial (existencia/fecha) |
+| Corte Constitucional — Relatoría | https://www.corteconstitucional.gov.co/relatoria/ | Si una norma fue declarada inexequible o condicionada |
+
+**Regla de vigencia:** si la norma está derogada/modificada/inexequible, decirlo y aplicar la
+norma vigente que la sustituye; nunca citar la derogada como fundamento. El método y las
+plantillas de búsqueda están en `PROTOCOLO_ESTRICTO.md` (sección 1-QUATER).
+
+**Actions disponibles (si montas la API):**
+- `consultarNorma` (POST /norma): trae un artículo del CPACA o la Constitución.
+- `buscarNorma` (POST /norma/buscar): resuelve **cualquier ley/decreto** (tipo, número, año,
+  artículo, tema). Si está catalogada, devuelve el texto del Gestor Normativo; en todo caso
+  devuelve las **fuentes oficiales**, **consultas web** listas para usar y un **chequeo
+  heurístico de vigencia** (que debe confirmarse en SUIN-Juriscol / Corte Constitucional).
+
 ---
 
 ## 3. Artículos del CPACA frecuentemente útiles por fase

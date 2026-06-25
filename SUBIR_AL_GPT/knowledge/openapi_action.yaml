@@ -28,6 +28,32 @@ paths:
       responses:
         "200":
           description: Artículo encontrado.
+  /norma/buscar:
+    post:
+      operationId: buscarNorma
+      summary: Resuelve cualquier ley o decreto y verifica vigencia (SUIN-Juriscol, Gestor Normativo).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo]
+              properties:
+                tipo:
+                  type: string
+                  description: "Ley, Decreto, Constitucion, etc."
+                numero:
+                  type: string
+                anio:
+                  type: string
+                articulo:
+                  type: integer
+                tema:
+                  type: string
+      responses:
+        "200":
+          description: Texto (si está catalogada) + fuentes oficiales + consultas web + vigencia.
   /jurisprudencia/samai:
     post:
       operationId: buscarJurisprudencia

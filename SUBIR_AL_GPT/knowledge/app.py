@@ -22,7 +22,7 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from fuentes_normativas import buscar_constitucion, buscar_cpaca
+from fuentes_normativas import buscar_constitucion, buscar_cpaca, buscar_norma
 from generar_documento import crear_word_providencia, convertir_a_pdf
 from samai_busqueda import buscar_samai
 
@@ -36,6 +36,14 @@ app = FastAPI(
 class NormaRequest(BaseModel):
     tipo: str  # "cpaca" | "constitucion"
     articulo: int
+
+
+class NormaBuscarRequest(BaseModel):
+    tipo: str  # "Ley" | "Decreto" | "Constitucion" | ...
+    numero: str = ""
+    anio: str = ""
+    articulo: Optional[int] = None
+    tema: str = ""
 
 
 class JurisprudenciaRequest(BaseModel):
@@ -63,6 +71,16 @@ def norma(req: NormaRequest):
     if tipo == "constitucion":
         return buscar_constitucion(req.articulo).__dict__
     return {"error": "El campo 'tipo' debe ser 'cpaca' o 'constitucion'."}
+
+
+@app.post("/norma/buscar")
+def norma_buscar(req: NormaBuscarRequest):
+    """Resuelve CUALQUIER ley/decreto: texto (si está catalogada) + fuentes oficiales,
+    consultas web y chequeo heurístico de VIGENCIA (verificar en SUIN-Juriscol)."""
+    return buscar_norma(
+        tipo=req.tipo, numero=req.numero, anio=req.anio,
+        articulo=req.articulo, tema=req.tema,
+    ).__dict__
 
 
 @app.post("/jurisprudencia/samai")

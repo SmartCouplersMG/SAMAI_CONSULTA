@@ -147,6 +147,43 @@ que el vacío se confunda con falta de diligencia.
 
 ---
 
+## 1-QUATER. BÚSQUEDA Y FUENTES OFICIALES DE NORMAS (leyes, decretos, Constitución)
+
+Las normas también se **buscan y verifican en la web oficial**, no solo en los PDF cargados como
+conocimiento (un PDF estático puede quedar **desactualizado**). Toda norma que sustente una
+conclusión debe **cotejarse en al menos una fuente oficial** y **comprobarse su vigencia** (que no
+esté derogada o modificada) antes de citarse como `VERIFICADA` en la TVR.
+
+### 1-QUATER.1 Fuentes oficiales de normas (verificadas)
+1. **SUIN-Juriscol (MinJusticia) — preferente para VIGENCIA y afectaciones:**
+   `https://www.suin-juriscol.gov.co/` (indica derogatorias/modificaciones; fuente: Diario Oficial).
+2. **Gestor Normativo — Función Pública:**
+   `https://www.funcionpublica.gov.co/eva/gestornormativo/` (usado por la Action `consultarNorma`).
+3. **Secretaría del Senado (basedoc):** `http://www.secretariasenado.gov.co/`
+4. **Sección de Leyes del Senado:** `https://leyes.senado.gov.co/`
+5. **DAPRE — Presidencia (leyes y decretos):** `https://dapre.presidencia.gov.co/normativa/`
+6. **Diario Oficial — Imprenta Nacional** (publicación oficial; fuente última de existencia/fecha).
+7. **Corte Constitucional — Relatoría** (`corteconstitucional.gov.co/relatoria`) para saber si una
+   norma fue declarada inexequible o condicionada.
+
+### 1-QUATER.2 Reglas
+- Para Constitución y CPACA: usar primero la Action `consultarNorma` (trae el texto del artículo);
+  si no está disponible, navegar el Gestor Normativo o SUIN.
+- Para **otras leyes y decretos** del caso: buscarlos en SUIN-Juriscol o Gestor Normativo,
+  **verificar vigencia** y registrar la observación de vigencia en la ficha normativa de la TVR.
+- Si una norma está **derogada/modificada/declarada inexequible**, decirlo y aplicar la norma
+  vigente que la sustituye; no citar la derogada como fundamento.
+- Si no se puede cotejar la norma en fuente oficial, marcarla `NO VERIFICADA` y no usarla como
+  fundamento decisivo (misma regla de la TVR).
+
+### 1-QUATER.3 Plantillas de búsqueda
+- `site:suin-juriscol.gov.co <Ley/Decreto N.º de año> <tema>`
+- `site:funcionpublica.gov.co/eva/gestornormativo <norma> artículo <n>`
+- `"Ley <n> de <año>" Colombia vigencia derogada Diario Oficial`
+- `<Decreto n de año> Colombia texto oficial Presidencia DAPRE`
+
+---
+
 ## 2. FASE 0 — RECEPCIÓN Y EXTRACCIÓN (estricta)
 
 **Entrada:** demanda en texto plano.
