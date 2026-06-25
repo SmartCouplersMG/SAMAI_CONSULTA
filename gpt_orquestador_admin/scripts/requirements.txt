@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+python-docx
+playwright
+fastapi
+uvicorn[standard]
+pydantic

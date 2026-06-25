@@ -1,0 +1,14 @@
+# Artefactos de reconocimiento (HTML/PDF/PNG grandes, no van al deploy)
+samai_page.html
+samai_resultados.html
+samai_resultados.png
+samai_get_directo.html
+doc_sample.html
+doc_sample.pdf
+providencia_*.pdf
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

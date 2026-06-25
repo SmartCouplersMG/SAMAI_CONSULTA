@@ -1,0 +1,88 @@
+openapi: 3.1.0
+info:
+  title: API Jurisprudencia SAMAI - Consejo de Estado
+  description: Busca providencias tituladas del Consejo de Estado de Colombia (sistema SAMAI).
+  version: 1.0.0
+servers:
+  - url: https://TU-URL-DE-DESPLIEGUE   # <-- reemplazar tras desplegar (Render, HF Spaces, etc.)
+paths:
+  /buscar:
+    get:
+      operationId: buscarJurisprudencia
+      summary: Busca providencias del Consejo de Estado por texto
+      parameters:
+        - name: consulta
+          in: query
+          required: true
+          description: Texto a buscar. Admite frases entre comillas y conectores AND/OR/AND NOT.
+          schema:
+            type: string
+        - name: pagina
+          in: query
+          required: false
+          description: Pagina de resultados (0 = primera). 10 resultados por pagina.
+          schema:
+            type: integer
+            default: 0
+        - name: orden
+          in: query
+          required: false
+          description: "Orden: 'FechaProvidencia desc' (reciente primero), 'FechaProvidencia' (antiguo), '' (ranking)."
+          schema:
+            type: string
+            default: FechaProvidencia desc
+      responses:
+        "200":
+          description: Resultados de la busqueda
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_paginas:
+                    type: integer
+                  resultados_en_pagina:
+                    type: integer
+                  resultados:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        radicado: { type: string }
+                        interno: { type: string }
+                        clase_proceso: { type: string }
+                        fecha_providencia: { type: string }
+                        ponente: { type: string }
+                        sala: { type: string }
+                        actor: { type: string }
+                        demandado: { type: string }
+                        tipo_providencia: { type: string }
+                        problema_juridico: { type: string }
+                        url_proceso: { type: string }
+                        url_documento: { type: string }
+  /documento:
+    get:
+      operationId: obtenerTextoProvidencia
+      summary: Devuelve el texto completo de una providencia
+      description: >
+        Recibe el campo 'url_documento' de un resultado de /buscar y devuelve el
+        texto integro del fallo (extraido del PDF). Llamar poco despues de buscar:
+        el enlace es de vida corta.
+      parameters:
+        - name: url_documento
+          in: query
+          required: true
+          description: Valor 'url_documento' tal cual viene en un resultado de /buscar.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Texto de la providencia
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url_pdf: { type: string }
+                  paginas: { type: integer }
+                  texto: { type: string }

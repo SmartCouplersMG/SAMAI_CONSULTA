@@ -1,0 +1,72 @@
+openapi: 3.1.0
+info:
+  title: Orquestador Jurídico Administrativo Colombia
+  description: >
+    Consulta artículos de la Constitución Política y del CPACA (Ley 1437 de 2011),
+    busca jurisprudencia del Consejo de Estado (SAMAI) y genera providencias en Word/PDF.
+  version: 1.0.0
+servers:
+  - url: https://TU-DOMINIO-PUBLICO   # reemplaza por tu URL (ngrok/Render/Railway)
+paths:
+  /norma:
+    post:
+      operationId: consultarNorma
+      summary: Obtiene el texto de un artículo de la Constitución o del CPACA.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [tipo, articulo]
+              properties:
+                tipo:
+                  type: string
+                  enum: [cpaca, constitucion]
+                articulo:
+                  type: integer
+      responses:
+        "200":
+          description: Artículo encontrado.
+  /jurisprudencia/samai:
+    post:
+      operationId: buscarJurisprudencia
+      summary: Busca providencias del Consejo de Estado en SAMAI.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [texto_busqueda]
+              properties:
+                texto_busqueda:
+                  type: string
+                clase_proceso:
+                  type: string
+                tipo_providencia:
+                  type: string
+      responses:
+        "200":
+          description: Lista de providencias (sin verificar).
+  /documento:
+    post:
+      operationId: generarDocumento
+      summary: Genera la providencia en Word (y opcionalmente PDF).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [texto_providencia]
+              properties:
+                texto_providencia:
+                  type: string
+                titulo:
+                  type: string
+                generar_pdf:
+                  type: boolean
+      responses:
+        "200":
+          description: Rutas de los archivos generados.
